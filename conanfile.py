@@ -21,23 +21,9 @@ class LibsrtpConan(ConanFile):
         os.rename(extracted_dir, self.source_subfolder)
 
     def build(self):
-
-        #self.run('./configure --prefix %s/build --libdir %s/build/lib --disable-maintainer-mode'
-        #' --disable-silent-rules  --enable-introspection'%(os.getcwd(),os.getcwd()))
-        #self.run('make -j4 all shared_library')
-        #self.run('make install')
-        
         with tools.chdir(self.source_subfolder):
             _args = ["--prefix=%s/builddir"%(os.getcwd())]
-
-            #if self.options.shared:
-            #    _args.extend(['--enable-shared=yes','--enable-static=no'])
-            #else:
-            #    _args.extend(['--enable-shared=no','--enable-static=yes'])
-
-            #self.run('./configure %s'%(' '.join(_args)))
-            #self.run('make -j4')
-            #self.run('make install')
+            
             autotools = AutoToolsBuildEnvironment(self)
             autotools.configure(args=_args)
             autotools.make(args=["-j4"],make_program='make all shared_library')
