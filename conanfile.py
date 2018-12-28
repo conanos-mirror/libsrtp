@@ -9,7 +9,7 @@ class LibsrtpConan(ConanFile):
     url = "https://github.com/conanos/libsrtp"
     homepage = "https://github.com/cisco/libsrtp"
     license = "BSD"
-    exports = ["LICENSE"]
+    exports = ["LICENSE","srtp.def"]
     generators = "visual_studio", "gcc"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
@@ -32,6 +32,8 @@ class LibsrtpConan(ConanFile):
         tools.get(url_.format(version=self.version))
         extracted_dir = self.name + "-" + self.version
         os.rename(extracted_dir, self._source_subfolder)
+        if self.settings.os == 'Windows':
+            shutil.copy2(os.path.join(self.source_folder,"srtp.def"), os.path.join(self.source_folder,self._source_subfolder,"srtp.def"))
     
     def build(self):
         if self.settings.os == 'Windows':
@@ -59,6 +61,8 @@ class LibsrtpConan(ConanFile):
                       src=os.path.join(self.build_folder,self._source_subfolder,output_rpath))
             self.copy("srtp.h", dst=os.path.join(self.package_folder,"include","srtp2"),
                       src=os.path.join(self.build_folder,self._source_subfolder,"include"))
+            self.copy("crypto_types.h", dst=os.path.join(self.package_folder,"include","srtp2"),
+                      src=os.path.join(self.build_folder,self._source_subfolder,"crypto","include"))
 
             tools.mkdir(os.path.join(self.package_folder,"lib","pkgconfig"))
             shutil.copyfile(os.path.join(self.build_folder,self._source_subfolder,"libsrtp2.pc.in"),
