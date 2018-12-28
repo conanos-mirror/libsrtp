@@ -57,7 +57,7 @@ class LibsrtpConan(ConanFile):
                       src=os.path.join(self.build_folder,self._source_subfolder,output_rpath), excludes=["srtp2.dll","srtp2.tlog"])
             self.copy("srtp2.dll", dst=os.path.join(self.package_folder,"bin"),
                       src=os.path.join(self.build_folder,self._source_subfolder,output_rpath))
-            self.copy("srtp.h", dst=os.path.join(self.package_folder,"include"),
+            self.copy("srtp.h", dst=os.path.join(self.package_folder,"include","srtp2"),
                       src=os.path.join(self.build_folder,self._source_subfolder,"include"))
 
             tools.mkdir(os.path.join(self.package_folder,"lib","pkgconfig"))
